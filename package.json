@@ -1,0 +1,31 @@
+{
+  "name": "obj-str",
+  "version": "0.0.0",
+  "description": "A tiny library for serializing Object values to Strings.",
+  "license": "MIT",
+  "repository": "lukeed/obj-str",
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "lukeed.com"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    ""
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "xo": "^0.17.0"
+  },
+  "xo": {
+    "esnext": true
+  }
+}
