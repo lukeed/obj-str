@@ -23,6 +23,8 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3",
     "xo": "^0.17.0"
   },
   "xo": {
