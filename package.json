@@ -1,9 +1,11 @@
 {
   "name": "obj-str",
   "version": "0.0.0",
-  "description": "A tiny library for serializing Object values to Strings.",
-  "license": "MIT",
   "repository": "lukeed/obj-str",
+  "description": "A tiny library for serializing Object values to Strings.",
+  "module": "dist/obj-str.es.js",
+  "main": "dist/obj-str.js",
+  "license": "MIT",
   "author": {
     "name": "Luke Edwards",
     "email": "luke.edwards05@gmail.com",
@@ -13,21 +15,27 @@
     "node": ">=4"
   },
   "scripts": {
+    "build": "rollup -c",
     "test": "xo && tape test/*.js | tap-spec"
   },
   "files": [
-    "index.js"
+    "dist"
   ],
   "keywords": [
     ""
   ],
   "dependencies": {},
   "devDependencies": {
+    "rollup": "^0.41.6",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
     "xo": "^0.17.0"
   },
   "xo": {
-    "esnext": true
+    "esnext": true,
+    "rules": {
+      "no-unused-expressions": 0,
+      "no-self-compare": 0
+    }
   }
 }
