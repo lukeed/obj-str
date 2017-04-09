@@ -22,9 +22,17 @@
     "dist"
   ],
   "keywords": [
-    ""
+    "react",
+    "preact",
+    "classes",
+    "classname",
+    "classnames",
+    "object",
+    "object-keys",
+    "object-string",
+    "object-values",
+    "serialize"
   ],
-  "dependencies": {},
   "devDependencies": {
     "rollup": "^0.41.6",
     "tap-spec": "^4.1.1",
