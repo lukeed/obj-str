@@ -1,4 +1,4 @@
-var index = function (obj) {
+export default function (obj) {
 	let cls = '';
 	for (const k in obj) {
 		if (obj[k]) {
@@ -8,5 +8,3 @@ var index = function (obj) {
 	}
 	return cls;
 };
-
-export default index;
