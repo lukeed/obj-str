@@ -1,6 +1,6 @@
 # obj-str [![Build Status](https://travis-ci.org/lukeed/obj-str.svg?branch=master)](https://travis-ci.org/lukeed/obj-str)
 
-> A tiny (130b) library for serializing Object values to Strings.
+> A tiny (110b) library for serializing Object values to Strings.
 
 This module's intended use is for converting an Object with CSS class names (as keys) to a space-delimited `className` string. Other modules have similar goals (like [`classnames`](https://npm.im/classnames)), but `obj-str` only does one thing. This is why it's only 130 bytes gzipped!
 
