@@ -27,7 +27,7 @@ objstr({ foo:true, bar:false, baz:isTrue() });
 With React (or any of the React-like libraries!), you can take advantage of any `props` or `state` values in order to express conditional classes as an object.
 
 ```js
-import React from ‘react’;
+import React from 'react';
 import objstr from 'obj-str';
 
 const TodoItem = ({ text, isDone, disabled }) => (
