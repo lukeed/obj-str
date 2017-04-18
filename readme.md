@@ -1,8 +1,8 @@
 # obj-str [![Build Status](https://travis-ci.org/lukeed/obj-str.svg?branch=master)](https://travis-ci.org/lukeed/obj-str)
 
-> A tiny (110b) library for serializing Object values to Strings.
+> A tiny (117b) library for serializing Object values to Strings.
 
-This module's intended use is for converting an Object with CSS class names (as keys) to a space-delimited `className` string. Other modules have similar goals (like [`classnames`](https://npm.im/classnames)), but `obj-str` only does one thing. This is why it's only 130 bytes gzipped!
+This module's intended use is for converting an Object with CSS class names (as keys) to a space-delimited `className` string. Other modules have similar goals (like [`classnames`](https://npm.im/classnames)), but `obj-str` only does one thing. This is why it's only 117 bytes gzipped!
 
 _PS: I made this because [Preact 8.0 removed this built-in behavior](https://github.com/developit/preact/commit/b2c85e3f7fa89ebbf242b00f4cab7619641e3a52) and I wanted a quick, drop-in replacement._
 
