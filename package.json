@@ -3,8 +3,10 @@
   "version": "1.0.1",
   "repository": "lukeed/obj-str",
   "description": "A tiny library for serializing Object values to Strings.",
-  "module": "dist/obj-str.es.js",
+  "unpkg": "dist/obj-str.min.js",
+  "module": "dist/obj-str.mjs",
   "main": "dist/obj-str.js",
+  "umd:name": "objstr",
   "license": "MIT",
   "author": {
     "name": "Luke Edwards",
@@ -15,7 +17,8 @@
     "node": ">=4"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "node builder",
+    "pretest": "node builder",
     "test": "tape test/*.js | tap-spec"
   },
   "files": [
@@ -34,8 +37,11 @@
     "serialize"
   ],
   "devDependencies": {
-    "rollup": "^0.41.6",
+    "gzip-size": "^5.0.0",
+    "mk-dirs": "^1.0.0",
+    "pretty-bytes": "^5.1.0",
     "tap-spec": "^4.1.1",
-    "tape": "^4.6.3"
+    "tape": "^4.6.3",
+    "terser": "^3.13.1"
   }
 }
