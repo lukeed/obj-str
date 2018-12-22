@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "test": "xo && tape test/*.js | tap-spec"
+    "test": "tape test/*.js | tap-spec"
   },
   "files": [
     "dist"
@@ -36,14 +36,6 @@
   "devDependencies": {
     "rollup": "^0.41.6",
     "tap-spec": "^4.1.1",
-    "tape": "^4.6.3",
-    "xo": "^0.17.0"
-  },
-  "xo": {
-    "esnext": true,
-    "rules": {
-      "no-unused-expressions": 0,
-      "no-self-compare": 0
-    }
+    "tape": "^4.6.3"
   }
 }
