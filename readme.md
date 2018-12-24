@@ -74,6 +74,11 @@ Type: `Object`
 A hashmap of keys & their truthy/falsey values. Booleans are preferred when speed is critically important.
 
 
+## Related
+
+- [clsx](https://github.com/lukeed/clsx) - Drop-in replacement for `obj-str` and `classnames` – handles all (and multiple) input types.
+
+
 ## License
 
 MIT © [Luke Edwards](http://lukeed.com)
