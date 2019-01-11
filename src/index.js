@@ -1,6 +1,6 @@
 export default function (obj) {
-	let cls = '';
-	for (const k in obj) {
+	var k, cls='';
+	for (k in obj) {
 		if (obj[k]) {
 			cls && (cls += ' ');
 			cls += k;
