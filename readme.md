@@ -42,6 +42,28 @@ const TodoItem = ({ text, isDone, disabled }) => (
 
 For simple use, the [React](#react) example will work for Preact too. However, you may also define a custom vNode "polyfill" to automatically handle Objects when used inside `className`.
 
+#### Preact 10
+
+```js
+import objstr from 'obj-str';
+import { options } from 'preact';
+
+const old = options.vnode;
+
+options.vnode = vnode => {
+  const props = vnode.props;
+  if (typeof props=='object' && props != null) {
+    const k = 'class' in props ? 'class' : 'className';
+    if (props[k] && typeof props[k]=='object') {
+      props[k] = objstr(props[k]);
+    }
+  }
+  old && old(vnode);
+};
+```
+
+#### Preact versions earlier than 10
+
 > **Note:** For users of Preact 7.1 and below, _you do not need this module_! Your version includes this behavior out of the box!
 
 ```js
