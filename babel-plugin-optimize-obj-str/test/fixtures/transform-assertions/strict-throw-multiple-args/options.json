@@ -1,0 +1,4 @@
+{
+  "plugins": [["../../../../src", { "strict": true }]],
+  "throws": "Object Expression initializer"
+}
