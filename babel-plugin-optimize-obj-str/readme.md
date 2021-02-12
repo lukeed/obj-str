@@ -178,7 +178,7 @@ The main benefit of using this transform is to improve execution performance. [Y
 | --------------------------------------------- | ----------------------------------------------- | ------------------------------------------ |
 | 7189456.12 ops/s ± 0.9%<br>**44.25 % slower** | 11159200.61 ops/s ± 0.74%<br>**13.46 % slower** | 12895408.64 ops/s ± 0.53%<br>**_Fastest_** |
 
-Other than execution performance, this transform should not be expected to reduce bundle size. In fact, depending on the amount of object properties and plugin configuration, it might actually output slightly _larger_ code.
+Apart from improving execution performance, this transform should not be expected to reduce bundle size. Depending on the amount of object properties and plugin configuration, it might actually output slightly _larger_ code.
 
 For example, using as many properties as letters in the English alphabet creates bundles nearly equal in size with `{ leadingSpace: false }`
 
@@ -192,7 +192,7 @@ objstr({ a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x,
 | ------------ | ------------------------- | ------------------------ |
 | `139 B`\*    | `129 B`\*                 | `103 B`\*                |
 
-_\* minified, brotli compressed_
+_\* bundled, minified, brotli compressed_
 
 Depending on your project's requirements, you might find the performance tradeoff beneficial or not. It's recommended to set `{ leadingSpace: true }` for the smallest bundle sizes, and to compare size deltas on your own bundles.
 
