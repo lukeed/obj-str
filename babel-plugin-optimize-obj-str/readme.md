@@ -172,15 +172,15 @@ coolFunction({ foo: true });
 
 ## Output Code Performance
 
-The main benefit of using this transform is to improve execution performance. [You may execute this benchmark](https://jsbench.me/nukl0mvqze/1) to confirm performance on a given environment, but in general you should see similar result properties as this run on desktop Chrome (88):
+The main benefit of using this transform is to improve execution performance. [You may run this benchmark](https://jsbench.me/nukl0mvqze/1) on any given environment, which should yield similar performance characteristics as this run on desktop Chrome (88):
 
 | no transform                                  | `{ leadingSpace: false }`                       | `{ leadingSpace: true }`                   |
 | --------------------------------------------- | ----------------------------------------------- | ------------------------------------------ |
 | 7189456.12 ops/s ± 0.9%<br>**44.25 % slower** | 11159200.61 ops/s ± 0.74%<br>**13.46 % slower** | 12895408.64 ops/s ± 0.53%<br>**_Fastest_** |
 
-Other than execution performance, this transform should not be expected to reduce bundle size in most cases. In fact, depending on your amount of classnames and configuration, it might actually output slightly _larger_ code.
+Other than execution performance, this transform should not be expected to reduce bundle size. In fact, depending on the amount of object properties and plugin configuration, it might actually output slightly _larger_ code.
 
-For example, using as many classes as letters in the English alphabet creates bundles nearly equal in size with `{ leadingSpace: false }`
+For example, using as many properties as letters in the English alphabet creates bundles nearly equal in size with `{ leadingSpace: false }`
 
 <!-- prettier-ignore -->
 ```js
@@ -194,7 +194,7 @@ objstr({ a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x,
 | `{ leadingSpace: false }` | <center>`129`</center>         |
 | `{ leadingSpace: true }`  | <center>`103`</center>         |
 
-Depending on your project's requirements, you might find the performance tradeoff beneficial or not. It's recommended to set `{ leadingSpace: true }` for the smallest bundle sizes, and to evaluate size deltas on your own bundles when using this transform.
+Depending on your project's requirements, you might find the performance tradeoff beneficial or not. It's recommended to set `{ leadingSpace: true }` for the smallest bundle sizes, and to compare size deltas on your own bundles.
 
 ## Quirks
 
