@@ -188,11 +188,11 @@ import objstr from 'obj-str';
 objstr({ a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z });
 ```
 
-|                           | minified,<br>brotli compressed |
-| ------------------------- | ------------------------------ |
-| no transform              | <center>`139`</center>         |
-| `{ leadingSpace: false }` | <center>`129`</center>         |
-| `{ leadingSpace: true }`  | <center>`103`</center>         |
+| no transform | `{ leadingSpace: false }` | `{ leadingSpace: true }` |
+| ------------ | ------------------------- | ------------------------ |
+| `139 B`\*    | `129 B`\*                 | `103 B`\*                |
+
+_\* minified, brotli compressed_
 
 Depending on your project's requirements, you might find the performance tradeoff beneficial or not. It's recommended to set `{ leadingSpace: true }` for the smallest bundle sizes, and to compare size deltas on your own bundles.
 
