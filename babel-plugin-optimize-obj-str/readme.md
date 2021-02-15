@@ -2,20 +2,22 @@
 
 > [Babel](https://babeljs.io/) plugin to optimize [`obj-str`](../) calls by replacing them with an equivalent unrolled expression.
 
-Even though the `obj-str` function is negligible in size over-the-wire, the motivation for this plugin is that transformed expressions [execute almost twice as fast as equivalent calls.](#output-code-performance)
+Even though the `obj-str` function is negligible in size over-the-wire, the motivation for this plugin is that transformed expressions [execute almost twice as fast as equivalent calls.](#performance)
 
 ```js
 import objstr from 'obj-str';
 objstr({
   'my-classname': true,
   'another-one': maybe,
+  'third': a && b,
 });
 
 // Transformed:
-'' + (true ? 'my-classname' : '') + (maybe ? ' another-one' : '');
+'' +
+  (true ? 'my-classname' : '') +
+  (maybe ? ' ' + 'another-one' : '') +
+  (a && b ? ' ' + 'third' : '');
 ```
-
-> **Note**: This plugin does not attempt to minimize output, so it may be wordy. You should additionally use a minifier like [`terser`](https://terser.org/) for best results.
 
 ## Install
 
@@ -48,7 +50,6 @@ module.exports = {
       'optimize-obj-str',
       {
         strict: false,
-        leadingSpace: false,
         referencesImport: ['obj-str', 'default'],
       },
     ],
@@ -95,55 +96,10 @@ Preserved calls force the resulting bundle to contain the `objstr()` function, w
 
 Instead, when setting the option **`{ strict: true }`** the plugin errors out to prevent this.
 
-> <pre><code>file.js: objstr() argument should be a single Object Expression initializer.
->   1 | objstr({ 'optimizable': true });
-> > 2 | objstr(cannotOptimizeIdentifierArg);
->     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</code></pre>
-
-### `leadingSpace`
-
-| type          | default |
-| ------------- | ------- |
-| **`boolean`** | `false` |
-
-**Enable to allow leading spaces in expression results.**
-
-Transformed expressions may employ a helper variable, so that a space separator is only conditionally included. This keeps the expression consistent with its equivalent `objstr()` result.
-
-```js
-objstr({ a: false, foo: true, bar: true });
-
-// Transformed and minified:
-('foo bar');
-```
-
-This helper variable is omitted when setting the option **`{ leadingSpace: true }`**, so expression results may include a leading space.
-
-```js
-(' foo bar');
-```
-
-The benefit of allowing this leading space is to output smaller code:
-
-```js
-objstr({ x, y, z });
-
-// { leadingSpace: false }
-let _;
-('' +
-  (x ? (_ = true, '') + 'x' : '') +
-  (y ? (_ ? ' ' : (_ = true, '')) + 'y' : '') +
-  (z ? (_ ? ' ' : (_ = true, '')) + 'z' : ''));
-
-
-// { leadingSpace: true }
-'' +
-  (x ? 'x' : '') +
-  (y ? ' y' : '') +
-  (z ? ' z' : ''));
-```
-
-> **Note**: This option is safe only when expression consumers ignore the leading space, like a classname on a DOM element would.
+<blockquote><pre><code>file.js: objstr() argument should be a single Object Expression initializer.
+  1 | objstr({ 'optimizable': true });
+> 2 | objstr(cannotOptimizeIdentifierArg);
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</code></pre></blockquote>
 
 ### `referencesImport`
 
@@ -172,31 +128,41 @@ coolFunction({ foo: true });
 
 ## Caveats
 
-### Output Code Performance
+### Requires Minification
 
-The purpose of this transform is to improve execution performance. [You may run this benchmark](https://jsbench.me/nukl0mvqze/1) on any given environment, which should yield similar performance characteristics as this run on desktop Chrome (88):
+This plugin does not attempt to minimize output, so it may be wordy. You should additionally use a minifier like [`terser`](https://terser.org/) for best results.
 
-| no transform                                  | `{ leadingSpace: false }`                       | `{ leadingSpace: true }`                   |
-| --------------------------------------------- | ----------------------------------------------- | ------------------------------------------ |
-| 7189456.12 ops/s ± 0.9%<br>**44.25 % slower** | 11159200.61 ops/s ± 0.74%<br>**13.46 % slower** | 12895408.64 ops/s ± 0.53%<br>**_Fastest_** |
-
-This transform should not be expected to reduce bundle size. Depending on the amount of object properties and plugin configuration, it might actually output slightly _larger_ code.
-
-For example, the following creates bundles nearly equally as large with `{ leadingSpace: false }`:
-
-<!-- prettier-ignore -->
 ```js
-import objstr from 'obj-str';
-objstr({ a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z });
+// transformed:
+'' + (true ? 'foo' : '');
+
+// transformed and minified:
+('foo');
 ```
 
-| no transform | `{ leadingSpace: false }` | `{ leadingSpace: true }` |
-| ------------ | ------------------------- | ------------------------ |
-| `139 B`\*    | `129 B`\*                 | `103 B`\*                |
+### Performance
 
-_\* bundled, minified, brotli compressed_
+The purpose of this transform is to improve execution performance. [This benchmark results in a ~1.8x speedup](https://jsbench.me/nukl0mvqze/1) on desktop Chrome (88) (`obj-str` calls are about 45% slower).
 
-Depending on your project's requirements, you might find the performance tradeoff beneficial or not. It's recommended to set `{ leadingSpace: true }` for the smallest bundle sizes, and to compare size deltas on your own bundles.
+You should not expect this transform should to reduce bundle size. Depending on the amount of object properties and plugin configuration, it might actually output slightly _larger_ code. A rough estimate is that [using less than ~100 different conditional properties](https://gist.github.com/alanorozco/6d83ae5af1ab121757fc29cdb5d77f22) should not increase the size of a bundle.
+
+### Leading Space
+
+Direct results from `objstr()` always omit a leading space:
+
+```js
+objstr({ a: false, foo: true });
+/* outputs: */ ('foo');
+```
+
+When using this transform, a leading space may be included:
+
+```js
+'' + (false ? 'a' : '') + (true ? ' ' + 'foo' : '');
+/* outputs: */ (' foo');
+```
+
+You must ensure that your expression consumers ignore this leading space. A [classname](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) should work just fine.
 
 ### Inconsistent Duplicates
 

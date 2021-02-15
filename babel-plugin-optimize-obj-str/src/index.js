@@ -69,28 +69,14 @@ module.exports = function babelPluginOptimizeObjstr(babel) {
 	/**
 	 * Generates expression to concatenate strings.
 	 */
-	function concatExpr(path, state, properties) {
-		let initialSeparator = '""';
-		let subsequentSeparator = '" "';
-
-		// When required, use a helper flag as to include a space separator only
-		// after a first part has been inserted.
-		if (
-			!state.opts.leadingSpace &&
-			properties.length > 1 &&
-			!t.isBooleanLiteral(properties[0].value, { value: true })
-		) {
-			const addSeparatorFlagId = path.scope.generateUidIdentifier();
-			path.scope.push({ id: addSeparatorFlagId });
-			initialSeparator = `(${addSeparatorFlagId.name} = true, "")`;
-			subsequentSeparator = `(${addSeparatorFlagId.name} ? " " : ${initialSeparator})`;
-		}
-
+	function concatExpr(properties) {
+		const { ast } = babel.template.expression;
 		return properties.reduce((previous, prop) => {
-			const separator = previous ? subsequentSeparator : initialSeparator;
-			return babel.template.expression.ast`
-				${previous || '""'} +
-					(${prop.value} ? (${separator} + ${propKey(prop)}) : "")`;
+			const condition = prop.value;
+			const part = propKey(prop);
+			return previous
+				? ast`${previous} + (${condition} ? ' ' + ${part} : '')`
+				: ast`'' + (${condition} ? ${part} : '')`;
 		}, null);
 	}
 
@@ -98,10 +84,8 @@ module.exports = function babelPluginOptimizeObjstr(babel) {
 		name: 'optimize-obj-str',
 		visitor: {
 			CallExpression(path, state) {
-				const [
-					moduleSource = 'obj-str',
-					importName = 'default',
-				] = state.opts.referencesImport || [];
+				const [moduleSource = 'obj-str', importName = 'default'] =
+					state.opts.referencesImport || [];
 
 				const callee = path.get('callee');
 				if (!callee.referencesImport(moduleSource, importName)) {
@@ -127,7 +111,7 @@ module.exports = function babelPluginOptimizeObjstr(babel) {
 					return;
 				}
 
-				const expression = concatExpr(path, state, usableProperties);
+				const expression = concatExpr(usableProperties);
 				path.replaceWith(expression);
 			},
 		},

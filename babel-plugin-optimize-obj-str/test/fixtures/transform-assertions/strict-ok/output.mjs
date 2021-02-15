@@ -1,2 +1,2 @@
 import objstr from 'obj-str';
-"" + (true ? "" + 'should-not-throw' : "");
+'' + (true ? 'should-not-throw' : '');
