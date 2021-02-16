@@ -1,4 +1,4 @@
-module.exports = function babelPluginOptimizeObjstr(babel) {
+module.exports = function (babel) {
 	const { types: t } = babel;
 
 	/**
