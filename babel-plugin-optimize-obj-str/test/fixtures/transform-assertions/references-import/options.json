@@ -1,5 +1,0 @@
-{
-  "plugins": [
-    ["../../../../src", { "referencesImport": ["fun-module", "coolFunction"] }]
-  ]
-}

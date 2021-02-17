@@ -50,7 +50,6 @@ module.exports = {
       'optimize-obj-str',
       {
         strict: false,
-        referencesImport: ['obj-str', 'default'],
       },
     ],
   ],
@@ -100,31 +99,6 @@ Instead, when setting the option **`{ strict: true }`** the plugin errors out to
   1 | objstr({ 'optimizable': true });
 > 2 | objstr(cannotOptimizeIdentifierArg);
     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</code></pre></blockquote>
-
-### `referencesImport`
-
-| type                   | default                  |
-| ---------------------- | ------------------------ |
-| **`[string, string]`** | `['obj-str', 'default']` |
-
-**Defines which imported function to transform.**
-
-By default, calls to the unnamed export from the `obj-str` module are transformed.
-
-```js
-import whateverName from 'obj-str';
-whateverName({ foo: true });
-```
-
-When using a module other than `obj-str`, you should specify an array with two items:  
-**`{ referencesImport: [moduleSource, importName] }`**
-
-```js
-// { referencesImport: ['fun-module', 'coolFunction'] }
-
-import { coolFunction } from 'fun-module';
-coolFunction({ foo: true });
-```
 
 ## Caveats
 

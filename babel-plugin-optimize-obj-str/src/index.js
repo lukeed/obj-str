@@ -84,11 +84,8 @@ module.exports = function babelPluginOptimizeObjstr(babel) {
 		name: 'optimize-obj-str',
 		visitor: {
 			CallExpression(path, state) {
-				const [moduleSource = 'obj-str', importName = 'default'] =
-					state.opts.referencesImport || [];
-
 				const callee = path.get('callee');
-				if (!callee.referencesImport(moduleSource, importName)) {
+				if (!callee.referencesImport('obj-str', 'default')) {
 					return;
 				}
 
