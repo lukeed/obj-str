@@ -1,10 +1,10 @@
 import objstr from 'obj-str';
 '' + (keyIsValueId ? "keyIsValueId" : '');
-'' + (false ? 'quoted' : '');
-'' + (true ? "unquoted" : '');
+"";
+"unquoted";
 '' + (probably ? identifierExpression : '');
 '' + (maybe ? compound + expression : '');
 '' + (maybeMemberExpression ? member.expression : '');
-'' + (true ? 'constant-true-first' : '') + (foo ? ' ' + 'anything else' : '');
-'' + (keyIsValueId ? "keyIsValueId" : '') + (false ? ' ' + 'quoted' : '') + (true ? ' ' + "unquoted" : '') + (probably ? ' ' + identifierExpression : '') + (maybe ? ' ' + (compound + expression) : '') + (maybeMemberExpression ? ' ' + member.expression : '');
+"constant-true-first" + (foo ? " anything else" : '');
+'' + (keyIsValueId ? "keyIsValueId" : '') + "" + " unquoted" + (probably ? ' ' + identifierExpression : '') + (maybe ? ' ' + (compound + expression) : '') + (maybeMemberExpression ? ' ' + member.expression : '');
 '' + (a ? 'not-nested' : '') + (c ? ' ' + ('' + (b ? "nested" : '')) : '');

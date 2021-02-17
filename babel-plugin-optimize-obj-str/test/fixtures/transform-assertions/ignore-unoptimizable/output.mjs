@@ -1,7 +1,7 @@
 import objstr from 'obj-str';
 
 function optimized() {
-  '' + (true ? 'should-optimize-object-literal' : '');
+  "should-optimize-object-literal";
 }
 
 function ignored() {

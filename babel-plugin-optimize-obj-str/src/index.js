@@ -1,5 +1,6 @@
 module.exports = function babelPluginOptimizeObjstr(babel) {
 	const { types: t } = babel;
+	const { ast } = babel.template.expression;
 
 	/**
 	 * Fails on strict mode when encountering an unoptimizable case.
@@ -67,10 +68,19 @@ module.exports = function babelPluginOptimizeObjstr(babel) {
 	}
 
 	/**
+	 * Replaces a path with a simpler constant value if possible.
+	 */
+	function maybeEvaluate(path) {
+		const { confident, value } = path.evaluate();
+		if (confident) {
+			path.replaceWith(ast(JSON.stringify(value)));
+		}
+	}
+
+	/**
 	 * Generates expression to concatenate strings.
 	 */
 	function concatExpr(properties) {
-		const { ast } = babel.template.expression;
 		return properties.reduce((previous, prop) => {
 			const condition = prop.value;
 			const part = propKey(prop);
@@ -110,6 +120,14 @@ module.exports = function babelPluginOptimizeObjstr(babel) {
 
 				const expression = concatExpr(usableProperties);
 				path.replaceWith(expression);
+
+				path.traverse({
+					BinaryExpression: maybeEvaluate,
+					ConditionalExpression: maybeEvaluate,
+					LogicalExpression: maybeEvaluate,
+				});
+
+				maybeEvaluate(path);
 			},
 		},
 	};
