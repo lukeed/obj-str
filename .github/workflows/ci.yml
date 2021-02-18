@@ -33,7 +33,7 @@ jobs:
       if: matrix.nodejs < 12
 
     - name: (coverage) Test
-      run: nyc --include=src npm test
+      run: nyc --include=src,babel-plugin-optimize-obj-str npm test
       if: matrix.nodejs >= 12
 
     - name: (coverage) Report
