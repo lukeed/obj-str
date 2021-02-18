@@ -1,28 +1,22 @@
 {
   "name": "babel-plugin-optimize-objstr",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "repository": "lukeed/obj-str",
   "description": "Babel plugin to optimize `obj-str` calls.",
-  "main": "src/index.js",
   "license": "MIT",
   "author": {
     "name": "Luke Edwards",
     "email": "luke.edwards05@gmail.com",
-    "url": "lukeed.com"
+    "url": "https://lukeed.com"
   },
-  "contributors": [
-    {
-      "name": "Alan Orozco",
-      "email": "alan@orozco.xyz",
-      "url": "https://alanoroz.co"
-    }
-  ],
+  "contributors": [{
+    "name": "Alan Orozco",
+    "email": "alan@orozco.xyz",
+    "url": "https://alanoroz.co"
+  }],
   "scripts": {
     "test": "jest --detectOpenHandles"
   },
-  "files": [
-    "dist"
-  ],
   "keywords": [
     "babel",
     "optimize",
@@ -37,10 +31,6 @@
     "object-values",
     "serialize"
   ],
-  "prettier": {
-    "singleQuote": true,
-    "quoteProps": "preserve"
-  },
   "jest": {
     "testRegex": "./test/.+\\.js$",
     "testPathIgnorePatterns": [
