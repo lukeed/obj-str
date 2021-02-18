@@ -13,10 +13,7 @@ objstr({
 });
 
 // Transformed:
-'' +
-  (true ? 'my-classname' : '') +
-  (maybe ? ' ' + 'another-one' : '') +
-  (a && b ? ' ' + 'third' : '');
+'my-classname' + (maybe ? ' another-one' : '') + (a && b ? ' third' : '');
 ```
 
 ## Install
@@ -73,9 +70,7 @@ objstr({
 });
 
 // Transformed:
-('' +
-  (true ? 'optimizable' : '');
-  (maybe ? ' ' + classes.myClass : ''));
+'optimizable' + (maybe ? ' ' + classes.myClass : '');
 ```
 
 By default, calls that cannot be optimized are preserved.
@@ -102,18 +97,6 @@ Instead, when setting the option **`{ strict: true }`** the plugin errors out to
 
 ## Caveats
 
-### Requires Minification
-
-This plugin does not attempt to minimize output, so it may be wordy. You should additionally use a minifier like [`terser`](https://terser.org/) for best results.
-
-```js
-// transformed:
-'' + (true ? 'foo' : '');
-
-// transformed and minified:
-('foo');
-```
-
 ### Performance
 
 The purpose of this transform is to improve execution performance. [This benchmark results in a ~1.8x speedup](https://jsbench.me/nukl0mvqze/1) on desktop Chrome (88) (`obj-str` calls are about 45% slower).
@@ -122,18 +105,13 @@ You should not expect this transform should to reduce bundle size. Depending on 
 
 ### Leading Space
 
-Direct results from `objstr()` always omit a leading space:
+Direct results from `objstr()` always omit a leading space. This is not the case when y using this transform:
 
 ```js
 objstr({ a: false, foo: true });
-/* outputs: */ ('foo');
-```
 
-When using this transform, a leading space may be included:
-
-```js
-'' + (false ? 'a' : '') + (true ? ' ' + 'foo' : '');
-/* outputs: */ (' foo');
+// transformed:
+(' foo');
 ```
 
 You must ensure that your expression consumers ignore this leading space. A [classname](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) should work just fine.
@@ -143,10 +121,10 @@ You must ensure that your expression consumers ignore this leading space. A [cla
 Object literals may contain duplicate property names, in which case [the lastly defined value is preserved.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Duplicate_property_names)
 
 ```js
-objstr({ dupe: 0, dupe: 1 });
+objstr({ dupe: one, dupe: two });
 
 // Transformed:
-'' + (1 ? 'dupe' : '');
+'' + (two ? 'dupe' : '');
 ```
 
 The example above is transformed properly since the duplicate property names are literal and constant. The plugin does its best to override duplicates by comparing property name expressions, but it's unable to compare equal computed results whose expressions vary.
