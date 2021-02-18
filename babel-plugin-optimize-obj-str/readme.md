@@ -1,4 +1,4 @@
-# babel-plugin-optimize-obj-str
+# babel-plugin-optimize-obj-str [![CI](https://github.com/lukeed/obj-str/workflows/CI/badge.svg)](https://github.com/lukeed/obj-str/actions) [![codecov](https://badgen.net/codecov/c/github/lukeed/obj-str)](https://codecov.io/gh/lukeed/obj-str)
 
 > [Babel](https://babeljs.io/) plugin to optimize [`obj-str`](../) calls by replacing them with an equivalent unrolled expression.
 
@@ -6,6 +6,7 @@ Even though the `obj-str` function is negligible in size over-the-wire, the moti
 
 ```js
 import objstr from 'obj-str';
+
 objstr({
   'my-classname': true,
   'another-one': maybe,
@@ -27,6 +28,7 @@ npm install --save-dev babel-plugin-optimize-obj-str
 **Via babel.config.js** ([recommended](https://babeljs.io/docs/en/configuration)):
 
 ```js
+// babel.config.js
 module.exports = {
   plugins: ['optimize-obj-str'],
 };
@@ -41,25 +43,22 @@ babel --plugins optimize-obj-str script.js
 ## Options
 
 ```js
+// babel.config.js
 module.exports = {
   plugins: [
-    [
-      'optimize-obj-str',
-      {
-        strict: false,
-      },
-    ],
+    ['optimize-obj-str', {
+      strict: false,
+    }],
   ],
 };
 ```
 
-### `strict`
+### options.strict
 
-| type          | default |
-| ------------- | ------- |
-| **`boolean`** | `false` |
+Type: `boolean` <br>
+Default: `false`
 
-**Enable to fail when encountering calls that cannot be optimized.**
+Allow Babel to throw errors when encountering `obj-str` calls that cannot be optimized.
 
 We can only optimize function calls whose single argument is an **object literal** containing only **keyed properties**.
 
@@ -95,6 +94,7 @@ Instead, when setting the option **`{ strict: true }`** the plugin errors out to
 > 2 | objstr(cannotOptimizeIdentifierArg);
     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</code></pre></blockquote>
 
+
 ## Caveats
 
 ### Performance
@@ -105,10 +105,13 @@ You should not expect this transform should to reduce bundle size. Depending on 
 
 ### Leading Space
 
-Direct results from `objstr()` always omit a leading space. This is not the case when y using this transform:
+Direct results from `objstr()` always omit a leading space. This is not the case when using this transform:
 
 ```js
-objstr({ a: false, foo: true });
+objstr({
+  a: false,
+  foo: true
+});
 
 // transformed:
 (' foo');
@@ -121,15 +124,17 @@ You must ensure that your expression consumers ignore this leading space. A [cla
 Object literals may contain duplicate property names, in which case [the lastly defined value is preserved.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Duplicate_property_names)
 
 ```js
-objstr({ dupe: one, dupe: two });
+objstr({
+  dupe: one,
+  dupe: two
+});
 
 // Transformed:
 '' + (two ? 'dupe' : '');
 ```
 
-The example above is transformed properly since the duplicate property names are literal and constant. The plugin does its best to override duplicates by comparing property name expressions, but it's unable to compare equal computed results whose expressions vary.
+The example above is transformed properly since the duplicate property names are literal and constant. The plugin does its best to override duplicates by comparing property name expressions, but it's unable to compare equal computed results whose expressions vary:
 
-<!-- prettier-ignore -->
 ```js
 objstr({
   good: one,

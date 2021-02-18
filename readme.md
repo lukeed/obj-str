@@ -1,4 +1,4 @@
-# obj-str [![Build Status](https://travis-ci.org/lukeed/obj-str.svg?branch=master)](https://travis-ci.org/lukeed/obj-str)
+# obj-str [![CI](https://github.com/lukeed/obj-str/workflows/CI/badge.svg)](https://github.com/lukeed/obj-str/actions) [![codecov](https://badgen.net/codecov/c/github/lukeed/obj-str)](https://codecov.io/gh/lukeed/obj-str)
 
 > A tiny (96B) library for serializing Object values to Strings.
 
@@ -31,7 +31,7 @@ import React from 'react';
 import objstr from 'obj-str';
 
 const TodoItem = ({ text, isDone, disabled }) => (
-  <li className={ objstr({ item:true, completed:isDone, disabled }) }> 
+  <li className={ objstr({ item:true, completed:isDone, disabled }) }>
     <input type="checkbox" disabled={ disabled } checked={ isDone } />
     <label>{ text }</label>
   </li>
