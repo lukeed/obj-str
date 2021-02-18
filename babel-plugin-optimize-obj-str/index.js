@@ -1,4 +1,9 @@
-module.exports = function (babel) {
+/**
+ * @param {import('@babel/core')} babel
+ * @param {boolean} [options.strict]
+ * @returns {import('@babel/core').PluginItem}
+ */
+module.exports = function (babel, options={}) {
 	const { types: t } = babel;
 	const { ast } = babel.template.expression;
 
@@ -6,9 +11,7 @@ module.exports = function (babel) {
 	 * Fails on strict mode when encountering an unoptimizable case.
 	 */
 	function throwUnoptimizable(path, state, message) {
-		if (state.opts.strict) {
-			throw path.buildCodeFrameError(message);
-		}
+		if (options.strict) throw path.buildCodeFrameError(message);
 	}
 
 	/**
