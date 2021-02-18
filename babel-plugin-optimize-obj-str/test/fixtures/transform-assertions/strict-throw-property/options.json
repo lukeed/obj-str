@@ -1,0 +1,4 @@
+{
+  "plugins": [["../../../../src", { "strict": true }]],
+  "throws": "found [SpreadElement] butSpreadOperatorIsNotOkay"
+}
