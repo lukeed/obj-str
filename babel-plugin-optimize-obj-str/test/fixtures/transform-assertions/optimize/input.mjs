@@ -1,7 +1,7 @@
 import objstr from 'obj-str';
 
 objstr({ keyIsValueId });
-objstr({ 'quoted': false });
+objstr({ 'quoted': x && y });
 objstr({ unquoted: true });
 objstr({ [identifierExpression]: probably });
 objstr({ [compound + expression]: maybe });
@@ -12,7 +12,7 @@ objstr({
 });
 objstr({
 	keyIsValueId,
-	'quoted': false,
+	'quoted': x && y,
 	unquoted: true,
 	[identifierExpression]: probably,
 	[compound + expression]: maybe,
