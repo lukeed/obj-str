@@ -14,9 +14,6 @@
     "email": "alan@orozco.xyz",
     "url": "https://alanoroz.co"
   }],
-  "scripts": {
-    "test": "jest --detectOpenHandles"
-  },
   "keywords": [
     "babel",
     "optimize",
@@ -30,17 +27,5 @@
     "object-string",
     "object-values",
     "serialize"
-  ],
-  "jest": {
-    "testRegex": "./test/.+\\.js$",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/test/fixtures/"
-    ],
-    "testEnvironment": "node"
-  },
-  "devDependencies": {
-    "@babel/helper-plugin-test-runner": "^7.12.13",
-    "jest": "^26.6.3"
-  }
+  ]
 }
