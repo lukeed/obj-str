@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "bundt",
-    "test": "uvu -r esm test"
+    "test": "uvu -r esm -i fixtures test"
   },
   "files": [
     "dist"
@@ -36,6 +36,7 @@
     "serialize"
   ],
   "devDependencies": {
+    "@babel/core": "7.12.17",
     "bundt": "1.1.2",
     "esm": "3.2.25",
     "uvu": "0.5.1"

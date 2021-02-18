@@ -1,3 +1,4 @@
 {
-  "plugins": [["../../../../src", { "strict": true }]]
+  "strict": true,
+  "throws": false
 }
