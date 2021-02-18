@@ -1,7 +1,17 @@
+// @ts-check
+
+/**
+ * @typedef {import('@babel/core').Node} Node
+ * @typedef {import('@babel/core').NodePath<*>} NodePath
+ * @typedef {import('@babel/core').PluginItem} PluginItem
+ * @typedef {import('@babel/core').types.ObjectExpression['properties']} ObjectProperties
+ */
+
 /**
  * @param {import('@babel/core')} babel
+ * @param {object} [options]
  * @param {boolean} [options.strict]
- * @returns {import('@babel/core').PluginItem}
+ * @returns {PluginItem}
  */
 module.exports = function (babel, options={}) {
 	const { types: t } = babel;
@@ -9,14 +19,17 @@ module.exports = function (babel, options={}) {
 
 	/**
 	 * Fails on strict mode when encountering an unoptimizable case.
+	 * @param {NodePath} path
+	 * @param {string} message
 	 */
-	function throwUnoptimizable(path, state, message) {
-		if (options.strict) throw path.buildCodeFrameError(message);
+	function unoptimizable(path, message) {
+		if (options.strict) throw path.buildCodeFrameError(`${path.node.callee.name}() ` + message);
 	}
 
 	/**
 	 * Decontextualizes a node for comparison with a different node, irrespective
 	 * of its location in source or surrounding comments.
+	 * @param {Node} node
 	 */
 	function decontextualize(node) {
 		const clean = { ...node };
@@ -39,51 +52,51 @@ module.exports = function (babel, options={}) {
 	/**
 	 * Converts identifier property keys into string literals as mapped by spec,
 	 * as how {a: x} is the same as {'a': x}.
+	 * @NOTE Ignores `SpreadElement` intentionally; see `dedupe`
+	 * @param {ObjectProperties[number]} prop
 	 */
 	function propKey(prop) {
-		return t.isIdentifier(prop.key) && !prop.computed
-			? t.stringLiteral(prop.key.name)
-			: prop.key;
+		return t.isSpreadElement(prop) ? void 0 :
+			t.isIdentifier(prop.key) && !prop.computed
+				? t.stringLiteral(prop.key.name)
+				: prop.key;
 	}
 
 	/**
 	 * Removes properties with duplicate keys, honoring the lastly defined value.
+	 * @param {NodePath} path
+	 * @param {ObjectProperties} properties
+	 * @returns {ObjectProperties|void}
 	 */
-	function dedupe(path, state, properties) {
-		const deduped = Object.create(null);
-		for (const prop of properties) {
-			if (!prop.key) {
-				const { name } = path.node.callee;
-				const { type, argument } = prop;
-				throwUnoptimizable(
-					path,
-					state,
-					`${name}() must only contain keyed props, found [${type}] ${
-						(argument && argument.name) || '(unknown)'
-					}`
-				);
-				return;
+	function dedupe(path, properties) {
+		const cache = Object.create(null);
+		for (let prop of properties) {
+			if ('key' in prop) {
+				cache[JSON.stringify(decontextualize(propKey(prop)))] = prop;
+			} else {
+				let { type, argument } = prop;
+				return unoptimizable(path, `must only contain keyed props, found [${type}] ${
+					(argument && argument.name) || '(unknown)'
+				}`);
 			}
-			const key = JSON.stringify(decontextualize(propKey(prop)));
-			deduped[key] = prop;
 		}
-		return Object.values(deduped);
+		return Object.values(cache);
 	}
 
 	/**
 	 * Replaces a path with a simpler constant value if possible.
+	 * @param {NodePath} path
 	 */
-	function maybeEvaluate(path) {
+	function tryEval(path) {
 		const { confident, value } = path.evaluate();
-		if (confident) {
-			path.replaceWith(ast(JSON.stringify(value)));
-		}
+		if (confident) path.replaceWith(ast(JSON.stringify(value)));
 	}
 
 	/**
 	 * Generates expression to concatenate strings.
+	 * @param {ObjectProperties} properties
 	 */
-	function concatExpr(properties) {
+	function expr(properties) {
 		return properties.reduce((previous, prop) => {
 			const condition = prop.value;
 			const part = propKey(prop);
@@ -96,42 +109,31 @@ module.exports = function (babel, options={}) {
 	return {
 		name: 'optimize-obj-str',
 		visitor: {
-			CallExpression(path, state) {
+			CallExpression(path) {
 				const callee = path.get('callee');
-				if (!callee.referencesImport('obj-str', 'default')) {
-					return;
+				if (!callee.referencesImport('obj-str', 'default')) return;
+
+				const argument = path.node.arguments[0];
+				if (path.node.arguments.length !== 1 || !t.isObjectExpression(argument)) {
+					return unoptimizable(path, 'argument should be a single Object Expression initializer.');
 				}
 
-				const objectExpression = path.node.arguments[0];
-				if (
-					path.node.arguments.length !== 1 ||
-					!t.isObjectExpression(objectExpression)
-				) {
-					throwUnoptimizable(
-						path,
-						state,
-						`${path.node.callee.name}() argument should be a single Object Expression initializer.`
+				const properties = dedupe(path, argument.properties);
+
+				if (properties) {
+					path.replaceWith(
+						expr(properties)
 					);
-					return;
+
+					path.traverse({
+						BinaryExpression: tryEval,
+						ConditionalExpression: tryEval,
+						LogicalExpression: tryEval,
+					});
+
+					tryEval(path);
 				}
-
-				const { properties } = objectExpression;
-				const usableProperties = dedupe(path, state, properties);
-				if (!usableProperties) {
-					return;
-				}
-
-				const expression = concatExpr(usableProperties);
-				path.replaceWith(expression);
-
-				path.traverse({
-					BinaryExpression: maybeEvaluate,
-					ConditionalExpression: maybeEvaluate,
-					LogicalExpression: maybeEvaluate,
-				});
-
-				maybeEvaluate(path);
-			},
-		},
+			}
+		}
 	};
 };
