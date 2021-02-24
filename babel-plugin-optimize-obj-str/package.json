@@ -1,8 +1,8 @@
 {
+  "version": "1.0.0",
   "name": "babel-plugin-optimize-objstr",
-  "version": "0.0.0",
-  "repository": "lukeed/obj-str",
   "description": "Babel plugin to optimize `obj-str` calls.",
+  "repository": "lukeed/obj-str",
   "license": "MIT",
   "author": {
     "name": "Luke Edwards",
