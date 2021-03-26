@@ -20,7 +20,7 @@ objstr({
 ## Install
 
 ```
-npm install --save-dev babel-plugin-optimize-obj-str
+npm install --save-dev babel-plugin-optimize-objstr
 ```
 
 ## Usage
@@ -30,14 +30,14 @@ npm install --save-dev babel-plugin-optimize-obj-str
 ```js
 // babel.config.js
 module.exports = {
-  plugins: ['optimize-obj-str'],
+  plugins: ['optimize-objstr'],
 };
 ```
 
 **Via CLI**:
 
 ```
-babel --plugins optimize-obj-str script.js
+babel --plugins optimize-objstr script.js
 ```
 
 ## Options
@@ -46,7 +46,7 @@ babel --plugins optimize-obj-str script.js
 // babel.config.js
 module.exports = {
   plugins: [
-    ['optimize-obj-str', {
+    ['optimize-objstr', {
       strict: false,
     }],
   ],
