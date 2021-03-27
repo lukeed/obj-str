@@ -6,6 +6,7 @@
   "unpkg": "dist/obj-str.min.js",
   "module": "dist/obj-str.mjs",
   "main": "dist/obj-str.js",
+  "types": "index.d.ts",
   "umd:name": "objstr",
   "license": "MIT",
   "author": {
@@ -21,6 +22,7 @@
     "test": "uvu -r esm -i fixtures test"
   },
   "files": [
+    "*.d.ts",
     "dist"
   ],
   "keywords": [
