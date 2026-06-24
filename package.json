@@ -38,7 +38,7 @@
     "serialize"
   ],
   "devDependencies": {
-    "@babel/core": "7.12.17",
+    "@babel/core": "7.29.6",
     "bundt": "1.1.2",
     "esm": "3.2.25",
     "uvu": "0.5.1"
